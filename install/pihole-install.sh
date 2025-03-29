@@ -22,13 +22,13 @@ mkdir -p /etc/pihole
 touch /etc/pihole/pihole.toml
 $STD bash <(curl -fsSL https://install.pi-hole.net) --unattended
 sed -i -E '
-/^\s*upstreams =/ s|=.*|= ["8.8.8.8", "8.8.4.4"]|
+/^\s*upstreams =/ s|=.*|= ["1.1.1.1", "1.0.0.1"]|
 /^\s*interface =/ s|=.*|= "eth0"|
 /^\s*queryLogging =/ s|=.*|= true|
 /^\s*size =/ s|=.*|= 10000|
 /^\s*active =/ s|=.*|= true|
 /^\s*listeningMode =/ s|=.*|= "LOCAL"|
-/^\s*port =/ s|=.*|= "80o,443os,[::]:80o,[::]:443os"|
+/^\s*port =/ s|=.*|= "80or,443os,[::]:80or,[::]:443os"|
 /^\s*pwhash =/ s|=.*|= ""|
 
 # DHCP Disable
@@ -47,8 +47,8 @@ sed -i -E '
 ' /etc/pihole/pihole.toml
 
 cat <<EOF > /etc/dnsmasq.d/01-pihole.conf
-server=8.8.8.8
-server=8.8.4.4
+server=1.1.1.1
+server=1.0.0.1
 EOF
 $STD pihole-FTL --config ntp.sync.interval 0
 systemctl restart pihole-FTL.service
@@ -115,15 +115,15 @@ forward-zone:
   forward-tls-upstream: yes
   forward-first: no
 
-  forward-addr: 8.8.8.8@853#dns.google
-  forward-addr: 8.8.4.4@853#dns.google
-  forward-addr: 2001:4860:4860::8888@853#dns.google
-  forward-addr: 2001:4860:4860::8844@853#dns.google
+  #forward-addr: 8.8.8.8@853#dns.google
+  #forward-addr: 8.8.4.4@853#dns.google
+  #forward-addr: 2001:4860:4860::8888@853#dns.google
+  #forward-addr: 2001:4860:4860::8844@853#dns.google
 
-  #forward-addr: 1.1.1.1@853#cloudflare-dns.com
-  #forward-addr: 1.0.0.1@853#cloudflare-dns.com
-  #forward-addr: 2606:4700:4700::1111@853#cloudflare-dns.com
-  #forward-addr: 2606:4700:4700::1001@853#cloudflare-dns.com
+  forward-addr: 1.1.1.1@853#cloudflare-dns.com
+  forward-addr: 1.0.0.1@853#cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1111@853#cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1001@853#cloudflare-dns.com
 
   #forward-addr: 9.9.9.9@853#dns.quad9.net
   #forward-addr: 149.112.112.112@853#dns.quad9.net
@@ -133,8 +133,8 @@ EOF
   fi
 cat <<EOF > /etc/dnsmasq.d/01-pihole.conf
 server=127.0.0.1#5335
-server=8.8.8.8
-server=8.8.4.4
+server=1.1.1.1
+server=1.0.0.1
 EOF
 
   sed -i -E '/^\s*upstreams\s*=\s*\[/,/^\s*\]/c\  upstreams = [\n    "127.0.0.1#5335",\n    "8.8.4.4"\n  ]' /etc/pihole/pihole.toml
