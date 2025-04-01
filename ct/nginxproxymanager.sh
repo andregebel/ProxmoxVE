@@ -33,7 +33,9 @@ function update_script() {
     $STD npm install -g pnpm@8.15
     msg_ok "Installed pnpm"
   fi
-  RELEASE="2.12.3"
+  RELEASE=$(curl -fsSL https://api.github.com/repos/NginxProxyManager/nginx-proxy-manager/releases/latest |
+    grep "tag_name" |
+    awk '{print substr($2, 3, length($2)-4) }')
   msg_info "Stopping Services"
   systemctl stop openresty
   systemctl stop npm
